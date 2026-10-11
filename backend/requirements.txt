@@ -1,0 +1,22 @@
+# Core FastAPI Backend
+fastapi>=0.110.0
+uvicorn[standard]>=0.28.0
+python-multipart>=0.0.9
+pydantic>=2.6.0
+pydantic-settings>=2.2.0
+
+# Deep Learning & Medical Imaging
+torch>=2.2.0
+nibabel>=5.2.0
+numpy>=1.26.0
+scipy>=1.12.0
+scikit-learn>=1.4.0
+Pillow>=10.2.0
+matplotlib>=3.8.0
+
+# PDF Research Reporting
+reportlab>=4.1.0
+
+# Testing & Utilities
+pytest>=8.1.0
+httpx>=0.27.0
