@@ -10,11 +10,8 @@ import {
 } from 'recharts';
 import {
   Activity,
-  AlertTriangle,
   Download,
   FileText,
-  PieChart,
-  Layers,
   Info
 } from 'lucide-react';
 import { QuantitativeReport } from '../../types/mri';

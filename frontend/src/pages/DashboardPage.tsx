@@ -4,12 +4,7 @@ import {
   Activity,
   Layers,
   UploadCloud,
-  CheckCircle2,
-  AlertCircle,
-  FileText,
-  Clock,
   ArrowRight,
-  TrendingUp,
   Award
 } from 'lucide-react';
 import { HealthResponse, ModelInfoResponse } from '../types/mri';

@@ -1,15 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Brain,
   Activity,
   Play,
-  CheckCircle2,
-  AlertCircle,
-  FileText,
-  RotateCcw,
-  Sparkles,
-  Layers,
-  ArrowRight
+  AlertCircle
 } from 'lucide-react';
 import { UploadResponse, ResultInfo, JobStatusResponse } from '../types/mri';
 import { MriDropzone } from '../components/upload/MriDropzone';
@@ -94,6 +88,17 @@ export const WorkspacePage: React.FC<Props> = ({ modelAvailable }) => {
     }
   };
 
+  const totalSlices = useMemo(() => {
+    if (!activeUpload) {
+      return { axial: 128, coronal: 128, sagittal: 128 };
+    }
+    return {
+      axial: activeUpload.total_slices_axial,
+      coronal: activeUpload.total_slices_coronal,
+      sagittal: activeUpload.total_slices_sagittal,
+    };
+  }, [activeUpload]);
+
   return (
     <div className="space-y-8 py-6">
       {/* Header */}
@@ -114,9 +119,10 @@ export const WorkspacePage: React.FC<Props> = ({ modelAvailable }) => {
         {activeUpload && !result && (
           <button
             onClick={handleStartAnalysis}
-            disabled={isAnalyzing}
+            disabled={isAnalyzing || !modelAvailable}
+            title={!modelAvailable ? 'Model checkpoint is currently unavailable' : 'Analyze MRI Scan'}
             className={`px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg transition-all ${
-              isAnalyzing
+              isAnalyzing || !modelAvailable
                 ? 'bg-slate-300 dark:bg-slate-700 text-slate-500 cursor-not-allowed'
                 : 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-blue-500/25 scale-[1.02]'
             }`}
@@ -129,7 +135,7 @@ export const WorkspacePage: React.FC<Props> = ({ modelAvailable }) => {
             ) : (
               <>
                 <Play className="w-4 h-4 fill-white" />
-                <span>Analyze MRI Scan</span>
+                <span>{modelAvailable ? 'Analyze MRI Scan' : 'Model Unavailable'}</span>
               </>
             )}
           </button>
@@ -190,13 +196,10 @@ export const WorkspacePage: React.FC<Props> = ({ modelAvailable }) => {
         <div className="lg:col-span-7 space-y-6">
           {activeUpload ? (
             <MriViewer
+              key={result ? result.result_id : activeUpload.upload_id}
               activeId={result ? result.result_id : activeUpload.upload_id}
               isResult={!!result}
-              totalSlices={{
-                axial: activeUpload.total_slices_axial,
-                coronal: activeUpload.total_slices_coronal,
-                sagittal: activeUpload.total_slices_sagittal,
-              }}
+              totalSlices={totalSlices}
               dimensions={activeUpload.dimensions}
               voxelSpacing={activeUpload.voxel_spacing}
             />

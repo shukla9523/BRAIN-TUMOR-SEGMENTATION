@@ -1,14 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  BarChart3,
-  TrendingDown,
-  Layers,
-  Database,
-  Award,
-  RefreshCw,
-  AlertTriangle,
-  BookOpen
-} from 'lucide-react';
+import { BarChart3, RefreshCw } from 'lucide-react';
 import { EvaluationMetricsData } from '../types/mri';
 import { MetricsCharts } from '../components/charts/MetricsCharts';
 import { api } from '../services/api';
@@ -18,7 +9,7 @@ export const EvaluationPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchMetrics = () => {
+  const handleRefresh = () => {
     setLoading(true);
     setError(null);
     api.getMetrics()
@@ -28,7 +19,20 @@ export const EvaluationPage: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchMetrics();
+    let active = true;
+    api.getMetrics()
+      .then((data) => {
+        if (active) setMetrics(data);
+      })
+      .catch((err) => {
+        if (active) setError(err.message || 'Failed to load evaluation metrics');
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
   }, []);
 
   return (
@@ -48,7 +52,7 @@ export const EvaluationPage: React.FC = () => {
         </div>
 
         <button
-          onClick={fetchMetrics}
+          onClick={handleRefresh}
           disabled={loading}
           className="px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold flex items-center gap-2 self-start sm:self-auto transition-all"
         >
