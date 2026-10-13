@@ -2,14 +2,8 @@ import React from 'react';
 import {
   Brain,
   Layers,
-  Activity,
   ShieldAlert,
-  Database,
-  Cpu,
-  FileCode2,
-  Lock,
-  GitBranch,
-  BookOpen
+  Lock
 } from 'lucide-react';
 
 export const AboutPage: React.FC = () => {

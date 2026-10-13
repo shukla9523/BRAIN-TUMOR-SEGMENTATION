@@ -1,14 +1,8 @@
 import React from 'react';
 import {
-  Brain,
-  Layers,
-  Activity,
   ShieldAlert,
   ArrowRight,
-  Database,
-  Cpu,
   BarChart3,
-  FileText,
   Sparkles
 } from 'lucide-react';
 

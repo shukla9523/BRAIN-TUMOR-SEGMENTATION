@@ -1,5 +1,5 @@
 import React from 'react';
-import { Activity, Brain, Moon, Sun, ShieldAlert, Cpu } from 'lucide-react';
+import { Brain, Moon, Sun, Cpu } from 'lucide-react';
 
 interface Props {
   currentTab: string;

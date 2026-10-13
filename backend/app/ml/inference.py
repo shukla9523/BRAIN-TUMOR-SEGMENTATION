@@ -51,7 +51,10 @@ class ModelInferenceService:
             return
 
         try:
-            checkpoint = torch.load(str(self.checkpoint_path), map_location=self.device)
+            try:
+                checkpoint = torch.load(str(self.checkpoint_path), map_location=self.device, weights_only=False)
+            except TypeError:
+                checkpoint = torch.load(str(self.checkpoint_path), map_location=self.device)
             state_dict = checkpoint.get("state_dict", checkpoint)
             arch = checkpoint.get("architecture", "3d_unet")
             in_channels = checkpoint.get("in_channels", 4)

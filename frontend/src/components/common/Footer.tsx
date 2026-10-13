@@ -1,6 +1,8 @@
 import React from 'react';
 import { Brain, ShieldAlert, BookOpen, ExternalLink, Code2 } from 'lucide-react';
 
+const CURRENT_YEAR = new Date().getFullYear();
+
 export const Footer: React.FC = () => {
   return (
     <footer className="border-t border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 mt-auto py-8 transition-colors">
@@ -61,7 +63,7 @@ export const Footer: React.FC = () => {
         </div>
 
         <div className="pt-6 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-          <p>© {new Date().getFullYear()} NeuroScan AI Project. Academic & Research Verification.</p>
+          <p>© {CURRENT_YEAR} NeuroScan AI Project. Academic & Research Verification.</p>
           <div className="flex items-center gap-4">
             <span>HIPAA/GDPR Data Hygiene Notice: Strip PHI prior to upload</span>
           </div>

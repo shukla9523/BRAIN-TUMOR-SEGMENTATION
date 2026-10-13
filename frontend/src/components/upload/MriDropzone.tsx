@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { UploadCloud, FileText, CheckCircle2, AlertCircle, RefreshCw, Sparkles, Layers, Box } from 'lucide-react';
+import { UploadCloud, CheckCircle2, AlertCircle, RefreshCw, Sparkles, Layers, Box } from 'lucide-react';
 import { UploadResponse, SampleScanItem } from '../../types/mri';
 import { api } from '../../services/api';
 
@@ -247,41 +247,70 @@ export const MriDropzone: React.FC<Props> = ({
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <button
-              onClick={() => handleLoadSample('sample_phantom_brats_flair')}
-              disabled={loadingSample}
-              className="p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-left hover:border-blue-500 hover:shadow-sm transition-all group flex items-start gap-2.5"
-            >
-              <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
-                <Box className="w-4 h-4" />
-              </div>
-              <div>
-                <p className="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-blue-600">
-                  Synthetic BraTS FLAIR Phantom
-                </p>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                  128×128×128 • Glioblastoma Multi-Compartment Phantom
-                </p>
-              </div>
-            </button>
+            {samples.length > 0 ? (
+              samples.map((s, idx) => (
+                <button
+                  key={s.sample_id}
+                  onClick={() => handleLoadSample(s.sample_id)}
+                  disabled={loadingSample}
+                  className="p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-left hover:border-blue-500 hover:shadow-sm transition-all group flex items-start gap-2.5"
+                >
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
+                    idx % 2 === 0
+                      ? 'bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400'
+                      : 'bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400'
+                  }`}>
+                    {idx % 2 === 0 ? <Box className="w-4 h-4" /> : <Layers className="w-4 h-4" />}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-blue-600 truncate">
+                      {s.filename}
+                    </p>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-2">
+                      {s.description}
+                    </p>
+                  </div>
+                </button>
+              ))
+            ) : (
+              <>
+                <button
+                  onClick={() => handleLoadSample('sample_phantom_brats_flair')}
+                  disabled={loadingSample}
+                  className="p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-left hover:border-blue-500 hover:shadow-sm transition-all group flex items-start gap-2.5"
+                >
+                  <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-950 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
+                    <Box className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-blue-600">
+                      Synthetic BraTS FLAIR Phantom
+                    </p>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                      128×128×128 • Glioblastoma Multi-Compartment Phantom
+                    </p>
+                  </div>
+                </button>
 
-            <button
-              onClick={() => handleLoadSample('sample_phantom_brats_t1ce')}
-              disabled={loadingSample}
-              className="p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-left hover:border-blue-500 hover:shadow-sm transition-all group flex items-start gap-2.5"
-            >
-              <div className="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
-                <Layers className="w-4 h-4" />
-              </div>
-              <div>
-                <p className="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-indigo-600">
-                  Synthetic BraTS T1ce Phantom
-                </p>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                  128×128×128 • Contrast-Enhancing Rim Simulation
-                </p>
-              </div>
-            </button>
+                <button
+                  onClick={() => handleLoadSample('sample_phantom_brats_t1ce')}
+                  disabled={loadingSample}
+                  className="p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-left hover:border-blue-500 hover:shadow-sm transition-all group flex items-start gap-2.5"
+                >
+                  <div className="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
+                    <Layers className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-slate-800 dark:text-slate-200 group-hover:text-indigo-600">
+                      Synthetic BraTS T1ce Phantom
+                    </p>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                      128×128×128 • Contrast-Enhancing Rim Simulation
+                    </p>
+                  </div>
+                </button>
+              </>
+            )}
           </div>
         </div>
       )}

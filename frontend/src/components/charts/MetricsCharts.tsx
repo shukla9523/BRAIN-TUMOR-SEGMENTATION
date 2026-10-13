@@ -12,7 +12,7 @@ import {
   ResponsiveContainer,
   Cell
 } from 'recharts';
-import { CheckCircle2, Award, TrendingDown, Target, Info, ShieldCheck } from 'lucide-react';
+import { Award, TrendingDown, Target, ShieldCheck } from 'lucide-react';
 import { EvaluationMetricsData } from '../../types/mri';
 
 interface Props {

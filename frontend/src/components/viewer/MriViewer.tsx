@@ -1,19 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  Sliders,
   ZoomIn,
   ZoomOut,
   RotateCcw,
-  Maximize2,
   ChevronLeft,
   ChevronRight,
-  Eye,
-  EyeOff,
   Split,
   Layers,
-  Sun,
-  Activity,
-  Check
+  Activity
 } from 'lucide-react';
 import { SliceVisualizationResponse } from '../../types/mri';
 import { api } from '../../services/api';
@@ -62,20 +56,21 @@ export const MriViewer: React.FC<Props> = ({
   // Maximum slice count for active plane
   const maxSlice = (totalSlices[plane] || 128) - 1;
 
-  // Reset slice index to midpoint when switching orthogonal plane
-  useEffect(() => {
-    const mid = Math.floor((totalSlices[plane] || 128) / 2);
+  // Handle switching orthogonal plane explicitly
+  const handlePlaneChange = (newPlane: 'axial' | 'coronal' | 'sagittal') => {
+    setPlane(newPlane);
+    const mid = Math.floor((totalSlices[newPlane] || 128) / 2);
     setSliceIndex(mid);
-  }, [plane, totalSlices]);
+  };
 
   // Fetch slice image whenever sliceIndex, plane, opacity, or activeId changes
   useEffect(() => {
     if (!activeId) return;
 
     let isSubscribed = true;
-    setLoadingSlice(true);
 
     const fetchSlice = async () => {
+      setLoadingSlice(true);
       try {
         let res: SliceVisualizationResponse;
         if (isResult) {
@@ -156,7 +151,7 @@ export const MriViewer: React.FC<Props> = ({
           {(['axial', 'coronal', 'sagittal'] as const).map((p) => (
             <button
               key={p}
-              onClick={() => setPlane(p)}
+              onClick={() => handlePlaneChange(p)}
               className={`px-3 py-1.5 rounded-lg font-semibold uppercase tracking-wider text-[11px] transition-all ${
                 plane === p
                   ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/20'

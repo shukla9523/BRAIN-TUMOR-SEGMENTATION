@@ -54,9 +54,14 @@ def run_integration_check():
     r_slice = client.get(f'http://127.0.0.1:8000/api/results/{result_id}/slice/64?plane=axial')
     print('[8] Axial Slice 64 Render:', r_slice.status_code, '| Image base64 length:', len(r_slice.json()['image_base64']))
 
-    # 9. Check Frontend server
-    r_front = client.get('http://127.0.0.1:5173/')
-    print('[9] React Frontend Server:', r_front.status_code, '| Title present:', '<title>' in r_front.text)
+    # 9. Check Frontend server (default port 5175 in vite.config.ts)
+    front_url = 'http://127.0.0.1:5175/'
+    try:
+        r_front = client.get(front_url)
+    except Exception:
+        front_url = 'http://127.0.0.1:5173/'
+        r_front = client.get(front_url)
+    print(f'[9] React Frontend Server ({front_url}):', r_front.status_code, '| Title present:', '<title>' in r_front.text)
     print('\n[SUCCESS] ALL LIVE SERVER ENDPOINTS ARE FUNCTIONAL!')
 
 if __name__ == '__main__':
